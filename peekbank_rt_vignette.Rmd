@@ -148,7 +148,8 @@ rts <- left_join(rts,
 ```{r}
 fam_rts <- rts %>%
   filter(stimulus_novelty == "familiar") %>%
-  filter(native_language == "eng")
+  filter(native_language == "eng") %>%
+  filter(age >= 23 & age <= 26)
 ```
 
 # Overall RT histograms
@@ -210,7 +211,7 @@ rt_average_subj <- fam_dt_rts %>%
 ```{r}
 ggplot(rt_average_subj,aes(age,average_rt))+
   geom_point()+
-  geom_smooth()
+  geom_smooth(method="lm")
 
 ggplot(filter(rt_average_subj,age<=26),aes(age,average_rt))+
   geom_point()+
@@ -233,7 +234,7 @@ confint(m, method="Wald")
 m <- lmer(average_rt ~ 1 + (1|subject_id),data=filter(rt_average_subj,dataset_name=="adams_marchman_2018"))
 summary(m)
 
-ggplot(filter(rt_average_subj,dataset_name=="adams_marchman_2018"),aes(average_rt))+
+ggplot(rt_average_subj,aes(average_rt))+
   geom_histogram()
 ggplot(filter(fam_dt_rts,dataset_name=="adams_marchman_2018"),aes(rt))+
   geom_histogram()
